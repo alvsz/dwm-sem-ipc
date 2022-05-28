@@ -30,6 +30,9 @@ static const Rule rules[] = {
 	/* class                            instance         title                 tags mask     isfloating   monitor */
 	{ "Pwcalculator",                   NULL,            NULL,                 0,            1,           -1 },
 	{ "Qalculate-gtk",                  NULL,            NULL,                 0,            1,           -1 },
+	{ "Blueberry.py",                   NULL,            NULL,                 0,            1,           -1 },
+	{ "org.gnome.Characters",           NULL,            NULL,                 0,            1,           -1 },
+	{ "Pavucontrol",                    NULL,            NULL,                 0,            1,           -1 },
 	{ "st-256color",                    NULL,            NULL,                 1,            0,           -1 },
 	{ "tabbed",                         NULL,            NULL,                 1,            0,           -1 },
 	{ "firefox",                        NULL,            NULL,                 1 << 1,       0,           -1 },
@@ -37,9 +40,11 @@ static const Rule rules[] = {
 	{ NULL,                             "Places",        NULL,                 1 << 1,       1,           -1 },
 	{ "Com.github.gabutakut.gabutdm",   NULL,            NULL,                 1 << 1,       0,           -1 },
 	{ "Gedit",                          NULL,            NULL,                 1 << 2,       0,           -1 },
+	{ "Emacs",                          NULL,            NULL,                 1 << 2,       0,           -1 },
 	{ NULL,                             "libreoffice",   NULL,                 1 << 2,       0,           -1 },
 	{ "Gimp",                           NULL,            NULL,                 1 << 2,       0,           -1 },
 	{ "Evince",                         NULL,            NULL,                 1 << 2,       0,           -1 },
+	{ "calibre",                        NULL,            NULL,                 1 << 2,       0,           -1 },
 	{ "Org.gnome.Nautilus",             NULL,            NULL,                 1 << 3,       0,           -1 },
 	{ "Geary",                          NULL,            NULL,                 1 << 4,       0,           -1 },
 	{ "discord",                        NULL,            NULL,                 1 << 4,       0,           -1 },
@@ -48,6 +53,7 @@ static const Rule rules[] = {
 	{ "Steam",                          NULL,            "Lista de amigos",    1 << 5,       1,           -1 },
 	{ "Steam",                          NULL,            "Steam — Novidades",  1 << 5,       1,           -1 },
 	{ "Rare",                           NULL,            NULL,                 1 << 5,       0,           -1 },
+	{ "PolyMC",                         NULL,            NULL,                 1 << 5,       1,           -1 },
 	{ "steam_proton",                   NULL,            NULL,                 1 << 5,       0,           -1 },
 };
 
@@ -63,8 +69,8 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "类",      tile },    /* first entry is default */
-	{ "缾",        NULL },    /* no layout function means floating behavior */
-	{ "类",      centeredmaster },
+	{ "缾",       NULL },    /* no layout function means floating behavior */
+	{ "类",     centeredmaster },
 	{ "",        monocle },
 	{ "",        spiral },
 	{ "[\\]",     dwindle },
@@ -75,7 +81,6 @@ static const Layout layouts[] = {
 	{ "###",      nrowgrid },
 	{ "---",      horizgrid },
 	{ ":::",      gaplessgrid },
-	{ "[]=",      tile },    /* first entry is default */
 	{ ">M>",      centeredfloatingmaster },
 };
 
@@ -99,21 +104,21 @@ static const char *tabterm[]           = { "tabbed", "-c", "-r 2", "st", "-w", "
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_d,                       spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_d,                       spawn,          SHCMD("dmenu_launcher") },
 	{ MODKEY|ShiftMask,             XK_Return,                  spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_t,                       spawn,          {.v = tabterm } },
-	{ MODKEY,                       XK_v,                       spawn,          {.v = clipmenucmd } },
+	{ MODKEY,                       XK_v,                       spawn,          SHCMD("dmenu_clip") },
 
 	{ 0,                            XF86XK_AudioStop,           spawn,          SHCMD("playerctl stop") }, //Fn+F1-F4
 	{ 0,                            XF86XK_AudioPrev,           spawn,          SHCMD("playerctl previous") },
 	{ 0,                            XF86XK_AudioPlay,           spawn,          SHCMD("playerctl play-pause") },
 	{ 0,                            XF86XK_AudioNext,           spawn,          SHCMD("playerctl next") },
-	
+
 	{ 0,                            XF86XK_Explorer,            spawn,          SHCMD("$EXPLORER") }, //Fn+F5-F8
 	{ 0,                            XF86XK_HomePage,            spawn,          SHCMD("$BROWSER") },
 	{ 0,                            XF86XK_Mail,                spawn,          SHCMD("$MAIL") },
 	{ 0,                            XF86XK_Calculator,          spawn,          SHCMD("$CALCULATOR") },
-	
+
 	{ 0,                            XF86XK_Tools,               spawn,          SHCMD("$PLAYER") }, //Fn+F9-F12
 	{ 0,                            XF86XK_AudioMute,           spawn,          SHCMD("volume mute") },
 	{ 0,                            XF86XK_AudioLowerVolume,    spawn,          SHCMD("volume down") },
@@ -132,7 +137,7 @@ static Key keys[] = {
         { MODKEY|ControlMask|ShiftMask, XK_equal,                   spawn,          SHCMD("backlight up1") },
 
 	{ 0,                            XF86XK_TouchpadToggle,      spawn,          SHCMD("touchpad") }, //Touchpad
-	
+
 	{ MODKEY,                       XK_j,                       spawn,          SHCMD("playerctl previous") }, //Midia
 	{ MODKEY,                       XK_k,                       spawn,          SHCMD("playerctl play-pause") },
 	{ MODKEY,                       XK_l,                       spawn,          SHCMD("playerctl next") },
@@ -142,13 +147,14 @@ static Key keys[] = {
 	{ ShiftMask,                    XK_Print,                   spawn,          SHCMD("gnome-screenshot -c -a") },
 	{ ShiftMask|ControlMask,        XK_Print,                   spawn,          SHCMD("gnome-screenshot -a") },
 	{ MODKEY,                       XK_Print,                   spawn,          SHCMD("gnome-screenshot -i") },
-	//Atalhos
-	{ MODKEY,                       XK_f,                       spawn,          SHCMD("$EXPLORER") },
+
+	{ MODKEY,                       XK_f,                       spawn,          SHCMD("$EXPLORER") }, //Atalhos
 	{ MODKEY,                       XK_b,                       spawn,          SHCMD("$BROWSER") },
 	{ MODKEY,                       XK_e,                       spawn,          SHCMD("$MAIL") },
 	{ MODKEY,                       XK_c,                       spawn,          SHCMD("$CALENDAR") },
 	{ MODKEY,                       XK_s,                       spawn,          SHCMD("$PLAYER") },
-	
+	{ MODKEY,                       XK_period,                  spawn,          SHCMD("$EMOJIS") },
+
 	{ MODKEY,                       XK_p,                       togglebar,      {0} },
 	{ MODKEY,                       XK_Up,                      rotatestack,    {.i = +1 } },
 	{ MODKEY,                       XK_Down,                    rotatestack,    {.i = -1 } },
@@ -159,7 +165,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Down,                    incnmaster,     {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_Left,                    setmfact,       {.f = -0.05} },
 	{ MODKEY|ShiftMask,             XK_Right,                   setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Return,                  zoom,           {0} },
 	{ MODKEY,                       XK_equal,                   incrgaps,       {.i = +1 } },
 	{ MODKEY,                       XK_minus,                   incrgaps,       {.i = -1 } },
@@ -174,13 +179,13 @@ static Key keys[] = {
 	{ MODKEY,                       XK_space,                   togglefloating, {0} },
 	{ MODKEY,                       XK_0,                       view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,                       tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,                   focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period,                  focusmon,       {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_comma,                   focusmon,       {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_period,                  focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,                   tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period,                  tagmon,         {.i = +1 } },
 	{ MODKEY|ControlMask|ShiftMask, XK_q,                       quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_q,                       quit,           {1} },
-	
+
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
