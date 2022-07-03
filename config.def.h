@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 0;         /* border pixel of windows */
+static const unsigned int borderpx  = 1;         /* border pixel of windows */
 static const unsigned int snap      = 16;        /* snap pixel */
 static const unsigned int gappih    = 5;         /* horiz inner gap between windows */
 static const unsigned int gappiv    = 5;         /* vert inner gap between windows */
@@ -20,7 +20,7 @@ static const char dmenufont[]       = "Iosevka:size=13";
 #include <X11/XF86keysym.h>
 
 /* tagging */
-static const char *tags[] = { "", "爵", "", "", "", "" };
+static const char *tags[] = { "", "爵", "", "", "", "", "7", "8" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -30,15 +30,16 @@ static const Rule rules[] = {
 	/* class                            instance         title                 tags mask     isfloating   monitor */
 	{ "Pwcalculator",                   NULL,            NULL,                 0,            1,           -1 },
 	{ "Qalculate-gtk",                  NULL,            NULL,                 0,            1,           -1 },
+	{ "qalculate-qt",                   NULL,            NULL,                 0,            1,           -1 },
 	{ "Blueberry.py",                   NULL,            NULL,                 0,            1,           -1 },
 	{ "org.gnome.Characters",           NULL,            NULL,                 0,            1,           -1 },
 	{ "Pavucontrol",                    NULL,            NULL,                 0,            1,           -1 },
+	{ "Com.github.gabutakut.gabutdm",   NULL,            NULL,                 0,            1,           -1 },
 	{ "st-256color",                    NULL,            NULL,                 1,            0,           -1 },
 	{ "tabbed",                         NULL,            NULL,                 1,            0,           -1 },
 	{ "firefox",                        NULL,            NULL,                 1 << 1,       0,           -1 },
 	{ "librewolf",                      NULL,            NULL,                 1 << 1,       0,           -1 },
 	{ NULL,                             "Places",        NULL,                 1 << 1,       1,           -1 },
-	{ "Com.github.gabutakut.gabutdm",   NULL,            NULL,                 1 << 1,       0,           -1 },
 	{ "Gedit",                          NULL,            NULL,                 1 << 2,       0,           -1 },
 	{ "Emacs",                          NULL,            NULL,                 1 << 2,       0,           -1 },
 	{ NULL,                             "libreoffice",   NULL,                 1 << 2,       0,           -1 },
@@ -48,6 +49,7 @@ static const Rule rules[] = {
 	{ "Org.gnome.Nautilus",             NULL,            NULL,                 1 << 3,       0,           -1 },
 	{ "Geary",                          NULL,            NULL,                 1 << 4,       0,           -1 },
 	{ "discord",                        NULL,            NULL,                 1 << 4,       0,           -1 },
+	{ "spot",                           NULL,            NULL,                 1 << 4,       0,           -1 },
 	{ "Lutris",                         NULL,            NULL,                 1 << 5,       0,           -1 },
 	{ "Steam",                          NULL,            NULL,                 1 << 5,       0,           -1 },
 	{ "Steam",                          NULL,            "Lista de amigos",    1 << 5,       1,           -1 },
@@ -109,34 +111,35 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,                       spawn,          {.v = tabterm } },
 	{ MODKEY,                       XK_v,                       spawn,          SHCMD("dmenu_clip") },
 
-	{ 0,                            XF86XK_AudioStop,           spawn,          SHCMD("playerctl stop") }, //Fn+F1-F4
+	{ 0,                            XF86XK_AudioStop,           spawn,          SHCMD("playerctl stop") },
 	{ 0,                            XF86XK_AudioPrev,           spawn,          SHCMD("playerctl previous") },
 	{ 0,                            XF86XK_AudioPlay,           spawn,          SHCMD("playerctl play-pause") },
 	{ 0,                            XF86XK_AudioNext,           spawn,          SHCMD("playerctl next") },
 
-	{ 0,                            XF86XK_Explorer,            spawn,          SHCMD("$EXPLORER") }, //Fn+F5-F8
-	{ 0,                            XF86XK_HomePage,            spawn,          SHCMD("$BROWSER") },
-	{ 0,                            XF86XK_Mail,                spawn,          SHCMD("$MAIL") },
-	{ 0,                            XF86XK_Calculator,          spawn,          SHCMD("$CALCULATOR") },
-
-	{ 0,                            XF86XK_Tools,               spawn,          SHCMD("$PLAYER") }, //Fn+F9-F12
 	{ 0,                            XF86XK_AudioMute,           spawn,          SHCMD("volume mute") },
 	{ 0,                            XF86XK_AudioLowerVolume,    spawn,          SHCMD("volume down") },
 	{ ShiftMask,                    XF86XK_AudioLowerVolume,    spawn,          SHCMD("volume down1") },
 	{ 0,                            XF86XK_AudioRaiseVolume,    spawn,          SHCMD("volume up") },
 	{ ShiftMask,                    XF86XK_AudioRaiseVolume,    spawn,          SHCMD("volume up1") },
 
-	{ 0,                            XF86XK_MonBrightnessUp,     spawn,          SHCMD("backlight up") }, //Luminosidade
-	{ ShiftMask,                    XF86XK_MonBrightnessUp,     spawn,          SHCMD("backlight up1") },
-	{ 0,                            XF86XK_MonBrightnessDown,   spawn,          SHCMD("backlight down") },
-        { ShiftMask,                    XF86XK_MonBrightnessDown,   spawn,          SHCMD("backlight down1") },
+	{ MODKEY,                       XK_F1,                      spawn,          SHCMD("volume mute") },
+	{ MODKEY,                       XK_F2,                      spawn,          SHCMD("volume down") },
+	{ MODKEY|ShiftMask,             XK_F2,                      spawn,          SHCMD("volume down1") },
+	{ MODKEY,                       XK_F3,                      spawn,          SHCMD("volume up") },	
+	{ MODKEY|ShiftMask,             XK_F3,                      spawn,          SHCMD("volume up1") },	
 
-	{ MODKEY|ControlMask,           XK_minus,                   spawn,          SHCMD("backlight down") },
-        { MODKEY|ControlMask|ShiftMask, XK_minus,                   spawn,          SHCMD("backlight down1") },
-	{ MODKEY|ControlMask,           XK_equal,                   spawn,          SHCMD("backlight up") },
-        { MODKEY|ControlMask|ShiftMask, XK_equal,                   spawn,          SHCMD("backlight up1") },
+	{ 0,                            XF86XK_MonBrightnessDown,   spawn,          SHCMD("backlight down") }, //Luminosidade
+        { ShiftMask,                    XF86XK_MonBrightnessDown,   spawn,          SHCMD("backlight down1") },
+	{ 0,                            XF86XK_MonBrightnessUp,     spawn,          SHCMD("backlight up") },
+	{ ShiftMask,                    XF86XK_MonBrightnessUp,     spawn,          SHCMD("backlight up1") },
+
+	{ MODKEY,                       XK_F4,                      spawn,          SHCMD("backlight down") },
+        { MODKEY|ShiftMask,             XK_F4,                      spawn,          SHCMD("backlight down1") },	
+	{ MODKEY,                       XK_F5,                      spawn,          SHCMD("backlight up") },
+	{ MODKEY|ShiftMask,             XK_F5,                      spawn,          SHCMD("backlight up1") },
 
 	{ 0,                            XF86XK_TouchpadToggle,      spawn,          SHCMD("touchpad") }, //Touchpad
+	{ MODKEY,                       XK_F6,                      spawn,          SHCMD("touchpad") },
 
 	{ MODKEY,                       XK_j,                       spawn,          SHCMD("playerctl previous") }, //Midia
 	{ MODKEY,                       XK_k,                       spawn,          SHCMD("playerctl play-pause") },
@@ -154,6 +157,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_c,                       spawn,          SHCMD("$CALENDAR") },
 	{ MODKEY,                       XK_s,                       spawn,          SHCMD("$PLAYER") },
 	{ MODKEY,                       XK_period,                  spawn,          SHCMD("$EMOJIS") },
+	{ 0,                            XF86XK_Calculator,          spawn,          SHCMD("$CALCULATOR") },
 
 	{ MODKEY,                       XK_p,                       togglebar,      {0} },
 	{ MODKEY,                       XK_Up,                      rotatestack,    {.i = +1 } },
@@ -175,7 +179,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_u,                       setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_i,                       setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_o,                       setlayout,      {.v = &layouts[3]} },
-	{ MODKEY|ShiftMask,             XK_space,                   setlayout,      {0} },
+	{ MODKEY|ShiftMask,             XK_space,                   setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_space,                   togglefloating, {0} },
 	{ MODKEY,                       XK_0,                       view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,                       tag,            {.ui = ~0 } },
@@ -185,6 +189,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period,                  tagmon,         {.i = +1 } },
 	{ MODKEY|ControlMask|ShiftMask, XK_q,                       quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_q,                       quit,           {1} },
+	{ MODKEY|ShiftMask,             XK_l,                       spawn,          SHCMD("loginctl lock-session") },
 
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
@@ -192,6 +197,8 @@ static Key keys[] = {
 	TAGKEYS(                        XK_4,                      3)
 	TAGKEYS(                        XK_5,                      4)
 	TAGKEYS(                        XK_6,                      5)
+	TAGKEYS(                        XK_7,                      6)
+	TAGKEYS(                        XK_8,                      7)
 };
 
 /* button definitions */
